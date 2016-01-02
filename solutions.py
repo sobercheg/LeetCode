@@ -71,6 +71,30 @@ class Solution(object):
 
         return recursive(l1, l2, 0)
 
+    # 3. Longest Substring Without Repeating Characters
+    # https://leetcode.com/problems/longest-substring-without-repeating-characters/
+    def lengthOfLongestSubstring(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        # Use a sliding window list:
+        #  if an element is not present add it
+        #  otherwise remove the first element in the window
+        import collections
+
+        if len(s) < 2:
+            return len(s)
+        q = collections.deque()
+        max_len = 0
+        for c in s:
+            while c in q:
+                q.popleft()
+            q.append(c)
+            if len(q) > max_len:
+                max_len = len(q)
+        return max_len
+
 
 # ------- Solution unit tests ----------
 class SolutionTest(unittest.TestCase):
@@ -113,7 +137,16 @@ class SolutionTest(unittest.TestCase):
                          ListNode(0),
                          'sum')
 
+    # 3. Longest Substring Without Repeating Characters
+    def testLengthOfLongestSubstring(self):
+        self.assertEqual(self.solution.lengthOfLongestSubstring('abcabcbb'), 3)  # abc
+        self.assertEqual(self.solution.lengthOfLongestSubstring('bbbbb'), 1)  # b
+        self.assertEqual(self.solution.lengthOfLongestSubstring('aab'), 2)  # ab
+        self.assertEqual(self.solution.lengthOfLongestSubstring('au'), 2)  # au
+        self.assertEqual(self.solution.lengthOfLongestSubstring('abba'), 2)  # ab
 
+
+# ------- Internal data structures unit tests --------
 class ListNodeTest(unittest.TestCase):
     def testEq(self):
         self.assertEqual(ListNode(3), ListNode(3), 'single node equal')
